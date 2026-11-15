@@ -5,7 +5,8 @@ Last updated: 2026-11-14
 ## Current state
 
 - **Active phase:** Phase 1 — Supabase authentication and accounts (authorized
-  2026-11-13; implementation in progress).
+  2026-11-13; application implementation and non-email manual checks complete,
+  with hosted email checks deferred until deployment).
 - **Last verified phase:** Phase 0 — repository audit and project foundation.
 - **Scope boundary:** Complete and verify Phase 1 only. Do not add organization
   membership, invitations, or other Phase 2 schema yet.
@@ -88,6 +89,15 @@ Last updated: 2026-11-14
   simpler brand/message/trust-cue panel. Existing field names, Server Actions,
   validation, and Supabase behavior were preserved. The shared shell also
   improves the recovery and confirmation states without changing their flows.
+- The user completed the existing-account sign-in, persisted-session, and
+  two-account profile-isolation checks on 2026-11-14. The second account kept
+  its own authenticated profile data, with no first-account profile rendered.
+- The shared sign-in and sign-up container now uses square corners and no outer
+  border on both routes. The left/right composition, shadow, text, and form
+  styling remain unchanged.
+- End-to-end forgot-password and production email-confirmation checks are
+  intentionally deferred until deployment, when custom SMTP and the production
+  redirect URLs can be configured and tested together.
 
 ## Post-Phase 0 UI refinements
 
@@ -228,6 +238,11 @@ Passed on 2026-11-14:
   vertical positions. The desktop auth container is now top-anchored at one
   shared offset instead of viewport-centered. `npm.cmd run lint` passed and
   both auth routes returned HTTP 200.
+- `npm.cmd run lint` — passed after removing the shared auth container's
+  corner radius and outer border. `/sign-in` and `/sign-up` both returned HTTP
+  200 after each refinement.
+- User-reported manual checks — existing-account sign-in, cookie-backed session
+  persistence, and two-account profile isolation behaved as expected.
 - `npm.cmd run build` — passed; `/auth/callback` and `/update-password` compile
   as dynamic routes, while `/forgot-password` and `/auth/recovery-error`
   prerender successfully.
@@ -275,17 +290,17 @@ Observed failures and resolutions:
 
 ## Known gaps and blockers
 
-- The user reports that the cumulative create-tables SQL has been applied, but
-  the profile trigger, grants, and RLS policies have not yet been independently
-  verified through the application.
-- Email confirmation settings, allowed redirect URLs, and the hosted
-  confirmation template must be configured before end-to-end email testing.
-- Signup, confirmation, authenticated profile update, persisted refresh, and
-  sign-out still require a real test account before the Phase 1 roadmap items
-  can be checked.
+- The cumulative create-tables SQL is applied, and the user-reported two-account
+  application check passed. The migration's complete trigger/backfill, grants,
+  and RLS policy suite still lacks an independent pgTAP/database test run.
+- End-to-end email confirmation and forgot-password delivery are deferred until
+  deployment. Custom SMTP, production redirect URLs, and the hosted email
+  templates must be configured before those checks can pass.
 
 ## Next exact task
 
-Continue the remaining sign-in and password-reset checks. Restore Confirm email
-and configure custom SMTP before verifying the production email flows or
-marking Phase 1 complete.
+Keep the two hosted email flows and the independent database policy suite on the
+deployment checklist. Phase 2 must not begin until the user explicitly approves
+advancing with those Phase 1 verification items deferred; once approved, start
+with the organization/membership schema and maintain the requested cumulative
+create-all and drop-all SQL scripts.

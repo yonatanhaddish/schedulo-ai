@@ -26,10 +26,10 @@ phase may be implemented.
 ## Phase 1 — Supabase authentication and accounts
 
 - [ ] Email/password signup with verification, sign-in, and sign-out.
-- [ ] Verified protected routes and unaffiliated-user onboarding.
+- [x] Verified protected routes and unaffiliated-user onboarding.
 - [ ] Profile migration, trigger/backfill behavior, and profile RLS policies.
-- [ ] Accessible validation and auth error states.
-- [ ] Unauthenticated and authenticated flow checks.
+- [x] Accessible validation and auth error states.
+- [x] Unauthenticated and authenticated flow checks.
 
 ## Phase 2 — Organizations and secure employee invitation
 
