@@ -1,6 +1,19 @@
 begin;
 
-select plan(9);
+create extension if not exists pgtap with schema extensions;
+
+select plan(10);
+
+select is(
+  (
+    select count(*)
+    from auth.users as users
+    left join public.profiles as profiles on profiles.id = users.id
+    where profiles.id is null
+  ),
+  0::bigint,
+  'every existing auth user has a profile'
+);
 
 insert into auth.users (
   id,

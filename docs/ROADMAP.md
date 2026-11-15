@@ -23,11 +23,11 @@ phase may be implemented.
 - [x] Verify a production build.
 - [x] Verify a development-server HTTP smoke check.
 
-## Phase 1 — Supabase authentication and accounts
+## Phase 1 — Supabase authentication and accounts (complete)
 
-- [ ] Email/password signup with verification, sign-in, and sign-out.
+- [x] Email/password signup with verification, sign-in, and sign-out.
 - [x] Verified protected routes and unaffiliated-user onboarding.
-- [ ] Profile migration, trigger/backfill behavior, and profile RLS policies.
+- [x] Profile migration, trigger/backfill behavior, and profile RLS policies.
 - [x] Accessible validation and auth error states.
 - [x] Unauthenticated and authenticated flow checks.
 

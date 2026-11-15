@@ -1,15 +1,15 @@
 # Schedulo AI progress
 
-Last updated: 2026-11-14
+Last updated: 2026-11-15
 
 ## Current state
 
-- **Active phase:** Phase 1 — Supabase authentication and accounts (authorized
-  2026-11-13; application implementation and non-email manual checks complete,
-  with hosted email checks deferred until deployment).
-- **Last verified phase:** Phase 0 — repository audit and project foundation.
-- **Scope boundary:** Complete and verify Phase 1 only. Do not add organization
-  membership, invitations, or other Phase 2 schema yet.
+- **Active phase:** None. Phase 1 is complete; Phase 2 has not yet been
+  authorized.
+- **Last verified phase:** Phase 1 — Supabase authentication and accounts
+  (completed 2026-11-15).
+- **Scope boundary:** Do not add organization membership, invitations, or other
+  Phase 2 schema until the user explicitly authorizes Phase 2.
 
 ## Repository audit
 
@@ -36,7 +36,7 @@ Last updated: 2026-11-14
   README.
 - Replaced the create-next-app placeholder with a responsive foundation page.
 
-## Phase 1 work in progress
+## Phase 1 work completed
 
 - Added the forward-only `public.profiles` migration with an `auth.users`
   foreign key, safe existing-user backfill, new-user trigger, updated-at
@@ -95,9 +95,19 @@ Last updated: 2026-11-14
 - The shared sign-in and sign-up container now uses square corners and no outer
   border on both routes. The left/right composition, shadow, text, and form
   styling remain unchanged.
-- End-to-end forgot-password and production email-confirmation checks are
-  intentionally deferred until deployment, when custom SMTP and the production
-  redirect URLs can be configured and tested together.
+- Deployed the application to Vercel at
+  `https://schedulo.mrirongoose.com`, connected the Cloudflare-managed DNS
+  subdomain, and configured the production application origin in Vercel and
+  Supabase.
+- Verified `auth.schedulo.mrirongoose.com` in Resend with isolated DKIM, SPF,
+  and DMARC records, then configured it as the Supabase custom SMTP sender.
+- Enabled production email confirmation and configured token-hash templates for
+  signup confirmation and password recovery against the application callback
+  routes.
+- Expanded the profile pgTAP suite to ten checks by adding repeatable extension
+  setup and an assertion that every existing Auth user has a backfilled profile.
+  The suite continues to isolate all temporary users and mutations inside a
+  transaction that ends with `rollback`.
 
 ## Post-Phase 0 UI refinements
 
@@ -253,6 +263,22 @@ Passed on 2026-11-14:
 - `git diff --check` — passed with only expected LF-to-CRLF working-tree
   notices, and the source scan found no TypeScript application files.
 
+Passed on 2026-11-15:
+
+- DNS verification — `schedulo.mrirongoose.com` resolved publicly as a CNAME
+  to the Vercel-provided target, and Vercel reported the custom domain as valid.
+- User-reported production authentication flow — a new account received the
+  Resend-backed confirmation email, followed the token-hash link to the live
+  application, completed onboarding, signed out, and signed back in.
+- User-reported production password recovery flow — the confirmed account
+  received the recovery email, followed the callback to the protected password
+  update page, reset its password, and successfully used the new password.
+- Hosted Supabase SQL Editor pgTAP run — all ten profile checks completed
+  through `ok 10` with no SQL error or failure diagnostics. The run verified
+  backfill coverage, new-user profile creation, anonymous denial, owner-only
+  select/update, cross-user isolation, and direct insert/delete denial, then
+  rolled back its temporary data.
+
 Passed on 2026-11-12:
 
 - `git diff --check` — passed; Git emitted only expected LF-to-CRLF working-tree
@@ -290,17 +316,11 @@ Observed failures and resolutions:
 
 ## Known gaps and blockers
 
-- The cumulative create-tables SQL is applied, and the user-reported two-account
-  application check passed. The migration's complete trigger/backfill, grants,
-  and RLS policy suite still lacks an independent pgTAP/database test run.
-- End-to-end email confirmation and forgot-password delivery are deferred until
-  deployment. Custom SMTP, production redirect URLs, and the hosted email
-  templates must be configured before those checks can pass.
+- No Phase 1 blocker remains. Phase 2 is intentionally unstarted pending user
+  authorization.
 
 ## Next exact task
 
-Keep the two hosted email flows and the independent database policy suite on the
-deployment checklist. Phase 2 must not begin until the user explicitly approves
-advancing with those Phase 1 verification items deferred; once approved, start
-with the organization/membership schema and maintain the requested cumulative
-create-all and drop-all SQL scripts.
+Request explicit authorization to begin Phase 2. Once authorized, start with
+the organization/membership schema and maintain the requested cumulative
+create-all and drop-all SQL scripts alongside forward-only migrations.

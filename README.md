@@ -5,11 +5,14 @@ will combine deterministic availability and conflict-safe booking with a
 conversational OpenAI layer. The application uses its own Supabase-backed
 calendar; external calendar integrations are intentionally out of scope.
 
-The repository is currently in **Phase 1: Supabase authentication and
-accounts**. The account UI, server actions, confirmation callback, protected
-onboarding route, and profiles migration are implemented. The migration and
-real email flow still need to be exercised against a configured Supabase
-project before Phase 1 can be marked complete.
+**Phase 1: Supabase authentication and accounts is complete.** The account UI,
+server actions, confirmation callback, protected onboarding route, profiles
+migration and RLS policies, custom-domain deployment, production email flows,
+and hosted database policy suite are implemented and verified. Phase 2 has not
+yet been authorized.
+
+The live application is available at
+<https://schedulo.mrirongoose.com>.
 
 ## Approved stack
 
